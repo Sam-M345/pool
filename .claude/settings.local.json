@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xdg-open:*)",
+      "Bash(python3:*)",
+      "Bash(rm:*)",
+      "Bash(chmod:*)"
+    ],
+    "deny": []
+  }
+}
