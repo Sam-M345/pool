@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    padding: 20px;
+    padding: 10px;
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #2c3e50, #34495e);
     color: white;
@@ -8,14 +8,21 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    /* Prevent mobile zooming */
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .game-container {
     text-align: center;
     background: rgba(0, 0, 0, 0.3);
-    padding: 20px;
+    padding: 15px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 100%;
+    width: fit-content;
 }
 
 h1 {
@@ -32,6 +39,8 @@ h1 {
     padding: 10px;
     background: rgba(0, 0, 0, 0.2);
     border-radius: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .game-info div {
@@ -50,6 +59,11 @@ h1 {
     background: #228b22;
     cursor: crosshair;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    /* Make canvas responsive */
+    max-width: 100%;
+    height: auto;
+    /* Touch-friendly */
+    touch-action: none;
 }
 
 #resetBtn {
@@ -70,4 +84,65 @@ h1 {
 
 #resetBtn:active {
     transform: translateY(1px);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+        align-items: flex-start;
+        padding-top: 20px;
+    }
+    
+    .game-container {
+        padding: 10px;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    
+    .game-info {
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+    
+    .game-info div {
+        font-size: 12px;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        max-width: 350px;
+        height: auto;
+        border-width: 2px;
+    }
+    
+    #resetBtn {
+        padding: 12px 24px;
+        font-size: 18px;
+        margin-top: 10px;
+        /* Make button more touch-friendly */
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: 8px;
+    }
+    
+    h1 {
+        font-size: 1.3em;
+    }
+    
+    #gameCanvas {
+        max-width: 300px;
+    }
 }

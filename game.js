@@ -252,10 +252,23 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-canvas.addEventListener('mousedown', (e) => {
+// Function to get touch/mouse position
+function getPointerPosition(e) {
     const rect = canvas.getBoundingClientRect();
-    mousePos.x = e.clientX - rect.left;
-    mousePos.y = e.clientY - rect.top;
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+    };
+}
+
+// Function to handle start of interaction (mouse down or touch start)
+function handlePointerStart(e) {
+    e.preventDefault(); // Prevent scrolling and other default behaviors
+    const pos = getPointerPosition(e);
+    mousePos.x = pos.x;
+    mousePos.y = pos.y;
     
     if (balls[0] && !balls.some(ball => ball.isMoving)) {
         cueStick.isAiming = true;
@@ -264,12 +277,14 @@ canvas.addEventListener('mousedown', (e) => {
         isDragging = true;
         hasDragged = false;
     }
-});
+}
 
-canvas.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    mousePos.x = e.clientX - rect.left;
-    mousePos.y = e.clientY - rect.top;
+// Function to handle movement (mouse move or touch move)
+function handlePointerMove(e) {
+    e.preventDefault(); // Prevent scrolling
+    const pos = getPointerPosition(e);
+    mousePos.x = pos.x;
+    mousePos.y = pos.y;
     
     if (isDragging && cueStick.isAiming) {
         const dragDistance = Math.sqrt(
@@ -280,9 +295,11 @@ canvas.addEventListener('mousemove', (e) => {
             hasDragged = true;
         }
     }
-});
+}
 
-canvas.addEventListener('mouseup', (e) => {
+// Function to handle end of interaction (mouse up or touch end)
+function handlePointerEnd(e) {
+    e.preventDefault();
     if (cueStick.isAiming && balls[0] && isDragging) {
         const cueBall = balls[0];
         const dx = mousePos.x - cueBall.x;
@@ -303,7 +320,17 @@ canvas.addEventListener('mouseup', (e) => {
         powerDisplay.textContent = '0';
         isDragging = false;
     }
-});
+}
+
+// Mouse events
+canvas.addEventListener('mousedown', handlePointerStart);
+canvas.addEventListener('mousemove', handlePointerMove);
+canvas.addEventListener('mouseup', handlePointerEnd);
+
+// Touch events for mobile
+canvas.addEventListener('touchstart', handlePointerStart, { passive: false });
+canvas.addEventListener('touchmove', handlePointerMove, { passive: false });
+canvas.addEventListener('touchend', handlePointerEnd, { passive: false });
 
 resetBtn.addEventListener('click', initGame);
 
